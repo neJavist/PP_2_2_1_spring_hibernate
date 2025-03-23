@@ -24,7 +24,7 @@ public class UserDaoImp implements UserDao {
     public List<User> listUsers() {
         TypedQuery<User> query = sessionFactory
                 .getCurrentSession()
-                .createQuery("from User");
+                .createQuery("from User u JOIN FETCH u.car", User.class);
         return query.getResultList();
     }
 
@@ -33,7 +33,8 @@ public class UserDaoImp implements UserDao {
     public List<User> listUsersByCar(String model, int series) {
         TypedQuery<User> query = sessionFactory
                 .getCurrentSession()
-                .createQuery("from User u where u.car.model = :model and u.car.series = :series");
+                .createQuery("from User u JOIN FETCH u.car c where c.model = :model and c.series = :series",
+                        User.class);
         query.setParameter("model", model);
         query.setParameter("series", series);
         return query.getResultList();
